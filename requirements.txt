@@ -1,0 +1,8 @@
+# DocPrint Runtime Documentation Generator
+# performance dependencies
+regex>=2025.9.1
+xxhash>=3.5.0
+ujson>=5.11.0
+
+# Optional performance dependencies
+orjson>=3.11.3
