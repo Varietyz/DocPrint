@@ -1075,5 +1075,5 @@ docPrint('divider', 'Double Line', divider_type='double', color='#c0392b', thick
 
 ## Documents
 
-- [README.md](https://github.com/Varietyz/DocPrint/blob/tree/README.md)
-- [Reference_Table.md](https://github.com/Varietyz/DocPrint/blob/tree/Reference_Table.md) - Function signatures and parameters
+- [README.md](https://github.com/Varietyz/DocPrint/blob/main/README.md)
+- [Reference_Table.md](https://github.com/Varietyz/DocPrint/blob/main/Reference_Table.md) - Function signatures and parameters
