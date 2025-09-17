@@ -38,6 +38,7 @@ class DocPrintManager:
 
         self.file_handler.set_output_filename(filepath)
         self.current_filepath = filepath
+        self.cache_manager.clear_header_cache()
         print(f"Output file set to: {filepath}")
 
     def flush_cache(self):
@@ -73,7 +74,7 @@ class DocPrintManager:
 _docprint_manager = DocPrintManager()
 
 def docPrint(section_type, header, content="", line=True, **kwargs):
-    _docprint_manager.docPrint(section_type, header, content, line, **kwargs)
+    return _docprint_manager.docPrint(section_type, header, content, line, **kwargs)
 
 def docPrintFile(filepath):
     _docprint_manager.docPrintFile(filepath)

@@ -10,7 +10,9 @@ class CoreFunctionalityTest:
     
     def _test_basic_functionality(self):
         print("Testing basic functionality...")
-        
+        docPrint('text', 'Status', 'Stag')
+        docPrint('text', 'Status', 'Rey')
+        docPrint('text', 'Status', 'Co')
         docPrint('header', 'Test Header', 'Test content', line=True)
         docPrint('text', 'Status Update', 'System operational', line=False)
         docPrint('table', 'Performance Data', [

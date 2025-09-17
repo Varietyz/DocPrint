@@ -69,7 +69,7 @@ enableGitCommits(False)
 ### Behavior
 - Only pushes when content actually changes
 - Uses content hashing to detect modifications
-- Creates single commit per sync with message: `docs: update {filename} via DocPrint`
+- Creates single commit per sync with message: `DocPrint: update {filename}`
 - Handles network failures gracefully
 - Thread-safe operation
 
@@ -157,6 +157,8 @@ docPrintFile("project/docs/api.md")
 
 # Reset to default
 docPrintFile("")  # Returns to DOC.PRINT.md
+docPrintFile(".")  # Returns to DOC.PRINT.md
+docPrintFile("..")  # Returns to DOC.PRINT.md
 ```
 
 **File switching:**
@@ -164,6 +166,7 @@ docPrintFile("")  # Returns to DOC.PRINT.md
 - Creates directories automatically
 - Thread-safe file operations
 - Atomic file writes prevent corruption
+- Invalid filename characters are rejected with ValueError
 
 ## Available Formatters
 
@@ -208,7 +211,7 @@ docPrint('table', 'Performance Data', [
 
 ---
 
-#### Table with Alignment
+#### Advanced Table with Alignment
 ```python
 docPrint('advanced_table', 'User Data', {
     'headers': ['Name', 'Age', 'Score'],
@@ -275,11 +278,18 @@ print("Hello World")
 #### Blockquote
 ```python
 docPrint('blockquote', 'Quote', 'This is important text')
+docPrint('blockquote', 'Multi-line Quote', ['Line 1', 'Line 2', 'Line 3'])
 ```
 
 ## Quote
 
 > This is important text
+
+## Multi-line Quote
+
+> Line 1
+> Line 2
+> Line 3
 
 ---
 
@@ -358,6 +368,148 @@ docPrint('task_list', 'Checklist', [
 
 ---
 
+### Layout Elements (Advanced)
+
+#### Flex Layout
+```python
+docPrint('flex_layout', 'Dashboard', [
+    {
+        'type': 'text',
+        'header': 'CPU Usage',
+        'content': '45%',
+        'style': 'background: #f0f0f0; padding: 10px;'
+    },
+    {
+        'type': 'table', 
+        'header': 'Memory',
+        'content': [{'used': '2.1GB', 'free': '1.9GB'}],
+        'style': 'background: #e0e0e0; padding: 10px;'
+    }
+], container_style='display: flex; gap: 20px; margin: 10px;')
+```
+
+## Dashboard
+
+<div style="display: flex; gap: 20px; margin: 10px;">
+
+<div style="flex: 1; background: #f0f0f0; padding: 10px;">
+
+### CPU Usage
+
+45%
+
+</div>
+
+<div style="flex: 1; background: #e0e0e0; padding: 10px;">
+
+### Memory
+
+| used | free |
+|---|---|
+| 2.1GB | 1.9GB |
+
+</div>
+
+</div>
+
+---
+
+#### Table Layout
+```python
+docPrint('table_layout', 'Comparison View', [
+    {
+        'type': 'bullets',
+        'header': 'Features',
+        'content': ['Fast', 'Reliable', 'Scalable'],
+        'style': 'border: 1px solid #ccc; padding: 15px;'
+    },
+    {
+        'type': 'alert',
+        'header': 'Status',
+        'content': 'All systems operational',
+        'kwargs': {'alert_type': 'success'},
+        'style': 'border: 1px solid #ccc; padding: 15px;'
+    }
+], table_style='width: 100%; border-collapse: collapse; margin: 10px 0;')
+```
+
+## Comparison View
+
+<table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+<tr>
+<td style="vertical-align: top; padding: 10px; border: 1px solid #ccc; padding: 15px;">
+
+### Features
+
+- Fast
+- Reliable
+- Scalable
+
+</td>
+<td style="vertical-align: top; padding: 10px; border: 1px solid #ccc; padding: 15px;">
+
+### Status
+
+> **[SUCCESS]**
+>
+> All systems operational
+
+</td>
+</tr>
+</table>
+
+---
+
+#### Grid Layout
+```python
+docPrint('grid_layout', 'Services Overview', [
+    {'type': 'text', 'header': 'Web Server', 'content': 'Running'},
+    {'type': 'text', 'header': 'Database', 'content': 'Connected'},
+    {'type': 'text', 'header': 'Cache', 'content': 'Active'},
+    {'type': 'text', 'header': 'Queue', 'content': 'Processing'}
+], columns=2, gap='15px')
+```
+
+## Services Overview
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+
+<div style="">
+
+### Web Server
+
+Running
+
+</div>
+
+<div style="">
+
+### Database
+
+Connected
+
+</div>
+
+<div style="">
+
+### Cache
+
+Active
+
+</div>
+
+<div style="">
+
+### Queue
+
+Processing
+
+</div>
+
+</div>
+
+---
+
 ### Visual Elements
 
 #### Badges
@@ -377,7 +529,8 @@ docPrint('badge', 'Python Badge', {
     'message': '3.9+',
     'color': 'blue',
     'logo': 'python',
-    'logo_color': 'white'
+    'logo_color': 'white',
+    'logo_width': '20'
 })
 ```
 
@@ -385,48 +538,52 @@ docPrint('badge', 'Python Badge', {
 
 [![build](https://img.shields.io/badge/build-passing-green?style=flat)](https://github.com/repo)
 
-
 ## Python Badge
 
-![Python](https://img.shields.io/badge/Python-3.9+-blue?style=flat&logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.9+-blue?style=flat&logo=python&logoColor=white&logoWidth=20)
+
 ---
 
 #### HTML Block
 ```python
 docPrint('html_block', 'Custom HTML', {
     'tag': 'div',
-    'attributes': {'class': 'highlight', 'id': 'test-div'},
-    'content': 'This is custom HTML content'
+    'attributes': {'class': 'highlight', 'id': 'test-div', 'style': 'background: yellow;'},
+    'content': 'This is custom HTML content with styling'
 })
 ```
 
 ## Custom HTML
 
-<div class="highlight" id="test-div">
-This is custom HTML content
+<div class="highlight" id="test-div" style="background: yellow;">
+This is custom HTML content with styling
 </div>
 
 ---
 
 #### CSS Block
 ```python
-docPrint('css_block', 'Styling', {
-    'selector': '.highlight',
+docPrint('css_block', 'Component Styling', {
+    'selector': '.dashboard-card',
     'styles': {
-        'background-color': 'yellow',
-        'padding': '10px',
-        'border-radius': '5px'
+        'background-color': '#f8f9fa',
+        'border': '1px solid #dee2e6',
+        'border-radius': '8px',
+        'padding': '1rem',
+        'margin': '0.5rem'
     }
 })
 ```
 
-## Styling
+## Component Styling
 
 ```css
-.highlight {
-  background-color: yellow;
-  padding: 10px;
-  border-radius: 5px;
+.dashboard-card {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem;
 }
 ```
 
@@ -435,15 +592,18 @@ docPrint('css_block', 'Styling', {
 #### SVG Animation
 ```python
 docPrint('svg_animation', 'Loading Spinner', {
-    'width': 50,
-    'height': 50,
+    'width': 60,
+    'height': 60,
     'elements': [{
         'tag': 'circle',
-        'attributes': {'cx': 25, 'cy': 25, 'r': 10, 'fill': 'blue'},
+        'attributes': {
+            'cx': 30, 'cy': 30, 'r': 20, 
+            'fill': 'none', 'stroke': 'blue', 'stroke-width': 3
+        },
         'animations': [{
-            'attributeName': 'r',
-            'values': '5;15;5',
-            'dur': '1s',
+            'attributeName': 'stroke-dasharray',
+            'values': '0 126;63 63;0 126',
+            'dur': '2s',
             'repeatCount': 'indefinite'
         }]
     }]
@@ -452,9 +612,9 @@ docPrint('svg_animation', 'Loading Spinner', {
 
 ## Loading Spinner
 
-<svg width="50" height="50" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="25" cy="25" r="10" fill="blue">
-    <animate attributeName="r" values="5;15;5" dur="1s" repeatCount="indefinite" />
+<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="30" cy="30" r="20" fill="none" stroke="blue" stroke-width="3">
+    <animate attributeName="stroke-dasharray" values="0 126;63 63;0 126" dur="2s" repeatCount="indefinite" />
   </circle>
 </svg>
 
@@ -464,38 +624,49 @@ docPrint('svg_animation', 'Loading Spinner', {
 
 #### Alert
 ```python
-docPrint('alert', 'Warning', 'This is important', alert_type='warning')
-docPrint('alert', 'Error List', ['Error 1', 'Error 2'], alert_type='error')
+docPrint('alert', 'System Warning', 'Disk space running low', alert_type='warning')
+docPrint('alert', 'Error Summary', ['Database connection failed', 'Retry attempts exhausted'], alert_type='error')
+docPrint('alert', 'Success Message', 'Deployment completed successfully', alert_type='success')
+docPrint('alert', 'Information', 'System maintenance scheduled for tonight', alert_type='info')
+docPrint('alert', 'Important Note', 'Remember to backup before upgrading', alert_type='note')
 ```
 
 Alert types: `info`, `warning`, `error`, `success`, `note`
 
-## Warning
+## System Warning
 
 > **[WARNING]**
 >
-> This is important
+> Disk space running low
 
-## Error List
+## Error Summary
 
 > **[ERROR]**
 >
-> Error 1
-> Error 2
+> Database connection failed
+> Retry attempts exhausted
 
 ---
 
 #### Collapsible Section
 ```python
-docPrint('collapsible', 'Details', 'Hidden content', summary='Click to expand')
+docPrint('collapsible', 'Debug Information', [
+    'Stack trace: line 42 in main.py',
+    'Memory usage: 1.2GB',
+    'CPU time: 2.1s'
+], summary='Click to show debug details')
 ```
 
-## Details
+## Debug Information
 
 <details>
-<summary>Click to expand</summary>
+<summary>Click to show debug details</summary>
 
-Hidden content
+Stack trace: line 42 in main.py
+
+Memory usage: 1.2GB
+
+CPU time: 2.1s
 
 </details>
 
@@ -503,40 +674,44 @@ Hidden content
 
 #### Image
 ```python
-docPrint('image', 'Logo', {
-    'url': 'https://example.com/logo.png',
-    'alt': 'Company Logo',
-    'title': 'Our Logo',
-    'width': '200',
-    'height': '100'
+docPrint('image', 'Architecture Diagram', {
+    'url': 'https://example.com/architecture.png',
+    'alt': 'System Architecture',
+    'title': 'Complete system overview',
+    'width': '800',
+    'height': '400'
 })
 
 # Simple version
-docPrint('image', 'Simple Image', 'https://example.com/image.jpg')
+docPrint('image', 'Screenshot', 'https://example.com/screenshot.jpg')
 ```
 
-## Logo
+## Architecture Diagram
 
-<img src="https://example.com/logo.png" alt="Company Logo" width="200" height="100" title="Our Logo" />
+<img src="https://example.com/architecture.png" alt="System Architecture" width="800" height="400" title="Complete system overview" />
 
-## Simple Image
+## Screenshot
 
-![Image](https://example.com/image.jpg)
+![Image](https://example.com/screenshot.jpg)
 
 ---
 
 #### Link Collection
 ```python
-docPrint('link_collection', 'Resources', [
-    {'url': 'https://github.com', 'text': 'GitHub', 'description': 'Code repository'},
-    {'url': 'https://docs.python.org', 'text': 'Python Docs'}
+docPrint('link_collection', 'Development Resources', [
+    {'url': 'https://github.com/company/project', 'text': 'Source Code', 'description': 'Main repository'},
+    {'url': 'https://docs.company.com', 'text': 'Documentation', 'description': 'API reference'},
+    {'url': 'https://company.slack.com', 'text': 'Team Chat'},
+    'https://example.com/simple-link'
 ])
 ```
 
-## Resources
+## Development Resources
 
-- [GitHub](https://github.com) - Code repository
-- [Python Docs](https://docs.python.org)
+- [Source Code](https://github.com/company/project) - Main repository
+- [Documentation](https://docs.company.com) - API reference
+- [Team Chat](https://company.slack.com)
+- https://example.com/simple-link
 
 ---
 
@@ -557,13 +732,21 @@ Generate and cache formatted content.
 - `alert_type`: Alert style (info, warning, error, success, note)
 - `summary`: Collapsible section summary text
 - `alignment`: Table column alignment (['left', 'center', 'right'])
+- `container_style`: CSS styles for layout containers
+- `columns`: Number of grid columns (grid_layout)
+- `gap`: Grid/flex gap size
+- `table_style`: CSS styles for table layouts
+- `style`: CSS styles for individual layout blocks
 
 ### docPrintFile(filepath)
 Set output file for subsequent docPrint calls.
 
 **Parameters:**
 - `filepath`: Target file path (creates directories as needed)
-- Empty string or None resets to default (DOC.PRINT.md)
+- Empty string, ".", or ".." resets to default (DOC.PRINT.md)
+
+**Raises:**
+- `ValueError`: Invalid filename characters (< > : " | ? *)
 
 ### flush_cache()
 Force write cached content to file immediately.
@@ -599,11 +782,41 @@ enableGitCommits(False)
 - Disabling clears any existing sync timers
 - Changes sync to currently configured output file
 
+## Smart Content Management
+
+### Header Deduplication
+DocPrint automatically handles duplicate headers by appending counters:
+
+```python
+docPrint('text', 'Status', 'First status')
+docPrint('text', 'Status', 'Second status')  # Becomes "Status (1)"
+docPrint('text', 'Status', 'Third status')   # Becomes "Status (2)"
+```
+
+### Content Updates and Matching
+Sections with the same header are automatically updated in place:
+
+```python
+docPrint('text', 'Server Status', 'Starting up')
+# Later...
+docPrint('text', 'Server Status', 'Running')  # Updates existing section
+```
+
+### Layout Content Detection
+DocPrint automatically detects layout content (flex, grid, table layouts) and uses specialized matching:
+
+```python
+# Layout content is normalized before comparison
+docPrint('flex_layout', 'Dashboard', layout_data)
+# Subsequent calls with same header but different spacing still match correctly
+```
+
 ## Performance Features
 
 ### Smart Caching
 - **Content deduplication**: Identical content is automatically deduplicated
 - **Hash-based comparison**: Uses xxhash (fast) or MD5 (fallback) for content comparison
+- **Layout normalization**: Special handling for HTML layout content
 - **Zero redundant I/O**: Repeated identical content doesn't trigger file writes
 
 ### Optimized I/O
@@ -611,56 +824,65 @@ enableGitCommits(False)
 - **Atomic writes**: Temporary files with atomic replacement prevent corruption
 - **Thread-safe operations**: RLock protection for concurrent access
 - **Efficient path operations**: Uses pathlib.Path for cross-platform compatibility
+- **In-memory content management**: Files loaded once and kept in memory per session
 
 ### Auto-flush Behavior
 - **Time-based**: Every 30 seconds
 - **Count-based**: Every 1000 docPrint calls
 - **Only when needed**: Empty cache skips I/O operations
+- **Automatic timer**: Starts on first docPrint call
 
-## Content Management
+## File Management Deep Dive
 
-### Content Updates
-Sections with the same header are automatically updated in place:
+### Content Matching Algorithm
+DocPrint uses regex-based content matching to update existing sections:
 
-```python
-docPrint('text', 'Status', 'Starting up')
-# Later...
-docPrint('text', 'Status', 'Running')  # Updates existing section
+1. **Header Detection**: Searches for `^## {header}$` patterns
+2. **Section Boundaries**: Finds next header or end of file
+3. **Content Comparison**: Compares cleaned content (normalized whitespace)
+4. **Selective Updates**: Only writes when content actually differs
+
+### File Structure
+```
+## Header 1
+
+Content for section 1
+
+---
+
+## Header 2
+
+Content for section 2
+
+---
 ```
 
-### Multi-file Documentation
-```python
-# API documentation
-docPrintFile("docs/api.md")
-docPrint('header', 'REST API', 'Version 2.0')
-docPrint('code_block', 'Authentication', auth_example, language='python')
+### Layout Content Handling
+Layout formatters (flex_layout, table_layout, grid_layout) receive special treatment:
 
-# Separate log file
-docPrintFile("logs/errors.log") 
-docPrint('alert', 'Database Error', error_details, alert_type='error')
-
-# Back to main docs
-docPrintFile("README.md")
-docPrint('header', 'Project Overview', project_description)
-```
+- Content normalization removes extra whitespace and line breaks
+- Hash comparison uses normalized content
+- Prevents spurious updates from formatting differences
 
 ## Configuration
 
 Located in `docprint.config.constants`:
 
 ```python
+MAX_FILE_LINES = 5000             # Maximum file lines (unused in current implementation)
 CACHE_FLUSH_INTERVAL = 30        # Auto-flush interval (seconds)
 CACHE_FLUSH_COUNT = 1000         # Auto-flush threshold (calls)
 DOC_FILE_PREFIX = "DOC.PRINT"    # Default file prefix
 DOC_FILE_EXTENSION = ".md"       # Default file extension
 DEFAULT_OUTPUT_DIR = "."         # Default output directory
+DYNAMIC_FILENAME = None          # Reserved for future use
 ```
 
 ## Dependencies
 
 **Core dependencies:**
-- `regex>=2025.9.1` - Fast pattern matching
-- `xxhash>=3.5.0` - Fast content hashing
+- `regex>=2025.9.1` - Fast pattern matching (fallback: standard `re`)
+- `xxhash>=3.5.0` - Fast content hashing (fallback: `hashlib.md5`)
 
 **Optional performance dependencies:**
 - `ujson>=5.11.0` - Fast JSON operations for GitHub API
@@ -670,23 +892,32 @@ DEFAULT_OUTPUT_DIR = "."         # Default output directory
 - Zero overhead when GitHub sync is disabled
 - Uses standard library urllib when performance packages unavailable
 - Fallback JSON handling maintains compatibility
+- Validates repository access before enabling sync
 
 ## Thread Safety
 
 DocPrint is fully thread-safe:
-- RLock protection for cache operations
+- RLock protection for cache operations and file handling
 - Atomic file writes prevent corruption
 - Safe concurrent access to all functions
 - Thread-safe file switching
+- Thread-safe GitHub sync operations
 
 ## Production Usage
 
 ```python
 import logging
-from docprint import docPrint, docPrintFile
+from docprint import docPrint, docPrintFile, enableGitCommits
 
 # Application startup
 docPrintFile("logs/application.md")
+
+# Enable GitHub sync for production monitoring
+enableGitCommits(True, 
+                token=os.getenv('GITHUB_TOKEN'), 
+                repo="company/production-logs",
+                interval_minutes=5)
+
 docPrint('header', 'Application Startup', f'Started at {datetime.now()}')
 
 # During operation (automatic caching and flushing)
@@ -696,7 +927,12 @@ def process_data(data):
     if errors:
         docPrint('alert', 'Processing Errors', errors, alert_type='error')
     
-    # No manual flush needed - auto-flush handles it
+    # Complex layout for dashboard
+    docPrint('flex_layout', 'System Status', [
+        {'type': 'text', 'header': 'CPU', 'content': f'{cpu_usage}%'},
+        {'type': 'text', 'header': 'Memory', 'content': f'{memory_usage}GB'},
+        {'type': 'alert', 'header': 'Alerts', 'content': alert_count, 'kwargs': {'alert_type': 'warning'}}
+    ])
 
 # Clean shutdown (optional manual flush)
 def shutdown():

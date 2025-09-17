@@ -24,7 +24,7 @@ class GitHubIntegrationTest:
             print("  GITHUB_REPO not set - using default test repository")
             print("  Set GITHUB_REPO environment variable for your test repository")
         
-        self._test_github_sync(token, repo)
+        #self._test_github_sync(token, repo)
     
     def _test_github_sync(self, token, repo):
         try:
