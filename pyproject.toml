@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "DocPrint"
-version = "1.2.0"
+version = "1.2.5"
 description = "Runtime documentation generation tool for live markdown output"
 readme = "README.md"
 requires-python = ">=3.7"
