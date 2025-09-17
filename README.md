@@ -82,7 +82,7 @@ Creates directories automatically. Thread-safe operations with atomic file write
 
 **Rich content:** alert, collapsible, image, link_collection
 
-See [Formats.md](https://github.com/Varietyz/DocPrint/blob/tree/Formats.md) for complete examples.
+See [Formats.md](https://github.com/Varietyz/DocPrint/blob/main/Formats.md) for complete examples. 
 
 ## Smart Features
 
@@ -132,8 +132,8 @@ def process_batch(data):
 
 ## Documentation
 
-- [Reference_Table.md](https://github.com/Varietyz/DocPrint/blob/tree/Reference_Table.md) - Function signatures and parameters
-- [Formats.md](https://github.com/Varietyz/DocPrint/blob/tree/Formats.md) - Complete formatter documentation with examples
+- [Reference_Table.md](https://github.com/Varietyz/DocPrint/blob/main/Reference_Table.md) - Function signatures and parameters
+- [Formats.md](https://github.com/Varietyz/DocPrint/blob/main/Formats.md) - Complete formatter documentation with examples
 
 ## Thread Safety
 
