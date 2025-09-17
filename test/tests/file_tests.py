@@ -1,5 +1,5 @@
 from pathlib import Path
-from docprint import docPrint, flush_cache, docPrintFile
+from docprint import docPrint, docFlush, docPrintFile
 
 class FileManagementTest:
     def run(self):
@@ -12,7 +12,7 @@ class FileManagementTest:
         
         docPrintFile("test_custom.md")
         docPrint('text', 'Custom File Test', 'This is in a custom file')
-        flush_cache()
+        docFlush()
         
         custom_file = Path('test_custom.md')
         if not custom_file.exists():
@@ -27,7 +27,7 @@ class FileManagementTest:
     def _test_directory_creation(self):
         docPrintFile("test_dir/nested/deep.md")
         docPrint('text', 'Deep File', 'Nested directory test')
-        flush_cache()
+        docFlush()
         
         deep_file = Path('test_dir/nested/deep.md')
         if not deep_file.exists():
@@ -41,7 +41,7 @@ class FileManagementTest:
     def _test_file_reset(self):
         docPrintFile("")
         docPrint('text', 'Back to Default', 'Should be in DOC.PRINT.md')
-        flush_cache()
+        docFlush()
         
         default_file = Path('DOC.PRINT.md')
         content = default_file.read_text(encoding='utf-8')

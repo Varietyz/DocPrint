@@ -17,7 +17,22 @@ class BaseFormatter:
             return result + '\n'
         return result
     
-    def _add_line_if_needed(self, result, line):
+    def _add_line_if_needed(self, result, line, **kwargs):
         if line:
-            return result + "---\n\n"
+            divider_line = kwargs.get('divider_line')
+            if divider_line:
+                divider_html = self._get_divider_formatter().format_divider_line(**divider_line)
+                return result + divider_html + "\n\n"
+            else:
+                return result + "---\n\n"
         return result
+    
+    def _get_divider_formatter(self):
+        from .divider import DividerFormatter
+        if not hasattr(self, '_divider_formatter'):
+            self._divider_formatter = DividerFormatter()
+        return self._divider_formatter
+    
+    def _format_default(self, header, content, line, **kwargs):
+        result = self._create_header(header)
+        return self._add_content_with_line(result, content, line)

@@ -1,7 +1,14 @@
 from .base import BaseFormatter
+from .divider import DividerFormatter
 
 class StructuralFormatter(BaseFormatter):
+    def __init__(self):
+        self.divider_formatter = DividerFormatter()
+    
     def format_section(self, section_type, header, content="", line=True, **kwargs):
+        if section_type == "divider":
+            return self.divider_formatter.format_section(section_type, header, content, line, **kwargs)
+        
         formatters = {
             "bullets": self._format_bullets,
             "horizontal_rule": self._format_horizontal_rule,
@@ -17,7 +24,7 @@ class StructuralFormatter(BaseFormatter):
         formatter = formatters.get(section_type)
         if formatter:
             return formatter(header, content, line, **kwargs)
-        return self._format_default(header, content, line)
+        return self._format_default(header, content, line, **kwargs)
 
     def _format_bullets(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -27,7 +34,7 @@ class StructuralFormatter(BaseFormatter):
             result += "\n"
         else:
             result += f"- {content}\n\n"
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_horizontal_rule(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -40,7 +47,7 @@ class StructuralFormatter(BaseFormatter):
         language = kwargs.get('language', '')
         result = self._create_header(header)
         result += f"```{language}\n{content}\n```\n\n"
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_blockquote(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -52,7 +59,7 @@ class StructuralFormatter(BaseFormatter):
             for quote_line in lines:
                 result += f"> {quote_line}\n"
         result += "\n"
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_ordered_list(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -62,7 +69,7 @@ class StructuralFormatter(BaseFormatter):
             result += "\n"
         else:
             result += f"1. {content}\n\n"
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_unordered_list(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -72,11 +79,7 @@ class StructuralFormatter(BaseFormatter):
             result += "\n"
         else:
             result += f"- {content}\n\n"
-        return self._add_line_if_needed(result, line)
-
-    def _format_default(self, header, content, line):
-        result = self._create_header(header)
-        return self._add_content_with_line(result, content, line)
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_footnotes(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -94,7 +97,7 @@ class StructuralFormatter(BaseFormatter):
         else:
             result += f"{content}\n\n"
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_definition_list(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -105,7 +108,7 @@ class StructuralFormatter(BaseFormatter):
         else:
             result += f"{content}\n\n"
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_task_list(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -121,4 +124,4 @@ class StructuralFormatter(BaseFormatter):
         else:
             result += f"{content}\n\n"
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)

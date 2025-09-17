@@ -1,6 +1,6 @@
 import time
 from pathlib import Path
-from docprint import docPrint, flush_cache
+from docprint import docPrint, docFlush
 from docprint.config import constants
 
 class CacheTest:
@@ -16,7 +16,7 @@ class CacheTest:
         constants.CACHE_FLUSH_INTERVAL = 2
         constants.CACHE_FLUSH_COUNT = 999
         
-        flush_cache()
+        docFlush()
         docPrint('text', 'Timed Entry', 'Should auto-flush after 2 seconds', line=True)
         time.sleep(4)
         

@@ -21,7 +21,7 @@ class DocPrintManager:
             self.file_handler = FileHandler()
             self.cache_manager.file_handler = self.file_handler
 
-    def docPrint(self, section_type, header, content="", line=True, **kwargs):
+    def docPrint(self, section_type, header, content="", line=False, **kwargs):
         self.initialize()
 
         formatted_content = self.unified_formatter.format_section(
@@ -34,14 +34,14 @@ class DocPrintManager:
         self.initialize()
 
         if self.cache_manager.cache:
-            self.flush_cache()
+            self.docFlush()
 
         self.file_handler.set_output_filename(filepath)
         self.current_filepath = filepath
         self.cache_manager.clear_header_cache()
         print(f"Output file set to: {filepath}")
 
-    def flush_cache(self):
+    def docFlush(self):
         if self.cache_manager:
             self.cache_manager.flush()
 
@@ -73,14 +73,14 @@ class DocPrintManager:
 
 _docprint_manager = DocPrintManager()
 
-def docPrint(section_type, header, content="", line=True, **kwargs):
+def docPrint(section_type, header, content="", line=False, **kwargs):
     return _docprint_manager.docPrint(section_type, header, content, line, **kwargs)
 
 def docPrintFile(filepath):
     _docprint_manager.docPrintFile(filepath)
 
-def flush_cache():
-    _docprint_manager.flush_cache()
+def docFlush():
+    _docprint_manager.docFlush()
 
 def enableGitCommits(enabled, **kwargs):
     _docprint_manager.enable_git_commits(enabled, **kwargs)

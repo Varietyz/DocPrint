@@ -1,1 +1,1 @@
-from .docprint_func import docPrint, flush_cache, docPrintFile, enableGitCommits
+from .docprint_func import docPrint, docFlush, docPrintFile, enableGitCommits

@@ -12,15 +12,13 @@ class BasicContentFormatter(BaseFormatter):
         formatter = formatters.get(section_type)
         if formatter:
             return formatter(header, content, line, **kwargs)
-        return self._format_text(header, content, line)
+        return self._format_text(header, content, line, **kwargs)
 
-    def _format_header(self, header, content, line):
-        header_line = f"## {header}\n\n"
-        if line and content:
-            header_line += f"{content}\n\n"
-        elif content:
-            header_line += f"{content}\n\n"
-        return header_line
+    def _format_header(self, header, content, line, **kwargs):
+        result = f"## {header}\n\n"
+        if content:
+            result += f"{content}\n\n"
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_table(self, header, content, line, **kwargs):
         result = f"## {header}\n\n"
@@ -38,13 +36,11 @@ class BasicContentFormatter(BaseFormatter):
             result += str(content) + "\n"
         return result + "\n"
 
-    def _format_text(self, header, content, line):
+    def _format_text(self, header, content, line, **kwargs):
         result = f"## {header}\n\n"
-        if line:
-            result += f"{content}\n\n---\n\n"
-        else:
+        if content:
             result += f"{content}\n\n"
-        return result
+        return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_advanced_table(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -76,4 +72,4 @@ class BasicContentFormatter(BaseFormatter):
         else:
             return self._format_table(header, content, line, **kwargs)
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)

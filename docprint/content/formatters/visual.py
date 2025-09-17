@@ -12,7 +12,7 @@ class VisualFormatter(BaseFormatter):
         formatter = formatters.get(section_type)
         if formatter:
             return formatter(header, content, line, **kwargs)
-        return self._format_default(header, content, line)
+        return self._format_default(header, content, line, **kwargs)
     
     def _format_badge(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -43,7 +43,7 @@ class VisualFormatter(BaseFormatter):
         else:
             result += f"{content}\n\n"
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_html_block(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -61,7 +61,7 @@ class VisualFormatter(BaseFormatter):
         else:
             result += f"{content}\n\n"
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_css_block(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -77,7 +77,7 @@ class VisualFormatter(BaseFormatter):
         else:
             result += f"```css\n{content}\n```\n\n"
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_svg_animation(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -109,13 +109,4 @@ class VisualFormatter(BaseFormatter):
         else:
             result += f"{content}\n\n"
         
-        return self._add_line_if_needed(result, line)
-    
-    def _format_default(self, header, content, line):
-        result = self._create_header(header)
-        return self._add_content_with_line(result, content, line)
-    
-    def _add_line_if_needed(self, result, line):
-        if line:
-            return result + "---\n\n"
-        return result
+        return self._add_line_if_needed(result, line, **kwargs)

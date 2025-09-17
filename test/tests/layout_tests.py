@@ -1,5 +1,5 @@
 from pathlib import Path
-from docprint import docPrint, flush_cache
+from docprint import docPrint, docFlush
 
 class LayoutTest:
     def run(self):
@@ -179,7 +179,7 @@ class LayoutTest:
         docPrint('table_layout', 'Daily Brief', styled_content,
                 table_style='width: 100%; border: 2px solid #ccc; border-radius: 8px;')
         
-        flush_cache()
+        docFlush()
         
         content = Path('DOC.PRINT.md').read_text(encoding='utf-8')
         layout_indicators = [

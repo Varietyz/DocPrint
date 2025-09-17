@@ -12,7 +12,7 @@ class RichContentFormatter(BaseFormatter):
         formatter = formatters.get(section_type)
         if formatter:
             return formatter(header, content, line, **kwargs)
-        return self._format_default(header, content, line)
+        return self._format_default(header, content, line, **kwargs)
     
     def _format_alert(self, header, content, line, **kwargs):
         alert_type = kwargs.get('alert_type', 'info')
@@ -36,7 +36,7 @@ class RichContentFormatter(BaseFormatter):
             result += f"> **{prefix}**\n>\n> {content}\n"
         
         result += "\n"
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_collapsible(self, header, content, line, **kwargs):
         summary = kwargs.get('summary', 'Details')
@@ -51,7 +51,7 @@ class RichContentFormatter(BaseFormatter):
             result += f"{content}\n\n"
         
         result += "</details>\n\n"
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_image(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -82,7 +82,7 @@ class RichContentFormatter(BaseFormatter):
         else:
             result += f"![Image]({content})\n\n"
         
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_link_collection(self, header, content, line, **kwargs):
         result = self._create_header(header)
@@ -104,13 +104,4 @@ class RichContentFormatter(BaseFormatter):
         else:
             result += f"{content}\n\n"
         
-        return self._add_line_if_needed(result, line)
-    
-    def _format_default(self, header, content, line):
-        result = self._create_header(header)
-        return self._add_content_with_line(result, content, line)
-    
-    def _add_line_if_needed(self, result, line):
-        if line:
-            return result + "---\n\n"
-        return result
+        return self._add_line_if_needed(result, line, **kwargs)

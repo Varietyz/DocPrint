@@ -43,14 +43,12 @@ class ContentMatcher:
     def _update_existing_section(self, existing_content, header, new_content, match):
         start_pos = match.start()
         end_pos = self._find_section_end(existing_content, start_pos)
+        existing_section = existing_content[start_pos:end_pos]
         
-        if self._content_differs(existing_content[start_pos:end_pos], new_content):
-            updated_content = (
-                existing_content[:start_pos] + 
-                new_content + 
-                existing_content[end_pos:]
-            )
-            return updated_content
+        if self._content_differs(existing_section, new_content):
+            return (existing_content[:start_pos] + 
+                    new_content + 
+                    existing_content[end_pos:])
         
         return existing_content
     
@@ -68,7 +66,9 @@ class ContentMatcher:
         return existing_clean != new_clean
     
     def _clean_content(self, content):
-        return content.strip().replace('\r\n', '\n')
+        cleaned = content.strip().replace('\r\n', '\n')
+        cleaned = re.sub(r'\n{3,}', '\n\n', cleaned)
+        return cleaned
     
     def _append_new_section(self, existing_content, new_content):
         if existing_content and not existing_content.endswith('\n'):

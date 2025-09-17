@@ -1,5 +1,5 @@
 from pathlib import Path
-from docprint import docPrint, flush_cache
+from docprint import docPrint, docFlush
 
 class FormatterTest:
     def run(self):
@@ -19,7 +19,7 @@ class FormatterTest:
         docPrint('ordered_list', 'Steps', ['Step 1', 'Step 2', 'Step 3'])
         docPrint('unordered_list', 'Items', ['Item A', 'Item B', 'Item C'])
         
-        flush_cache()
+        docFlush()
         
         content = Path('DOC.PRINT.md').read_text(encoding='utf-8')
         required_elements = [
@@ -78,7 +78,7 @@ class FormatterTest:
             }]
         })
         
-        flush_cache()
+        docFlush()
         
         content = Path('DOC.PRINT.md').read_text(encoding='utf-8')
         required_elements = [
@@ -115,7 +115,7 @@ class FormatterTest:
             {'url': 'https://docs.python.org', 'text': 'Python Docs', 'description': 'Official documentation'}
         ])
         
-        flush_cache()
+        docFlush()
         
         content = Path('DOC.PRINT.md').read_text(encoding='utf-8')
         required_elements = [
@@ -141,7 +141,7 @@ class FormatterTest:
         docPrint('link_collection', 'Simple Links', ['https://example.com', 'https://test.com'])
         docPrint('bullets', 'Single Bullet', 'Just one item')
         
-        flush_cache()
+        docFlush()
         
         content = Path('DOC.PRINT.md').read_text(encoding='utf-8')
         required_elements = [
@@ -187,5 +187,5 @@ class FormatterTest:
         for lang in ['python', 'javascript', 'bash', '']:
             docPrint('code_block', f'{lang or "Plain"} Code', f'// {lang or "plain"} code example', language=lang)
         
-        flush_cache()
+        docFlush()
         print("  All formatter combinations work")

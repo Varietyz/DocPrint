@@ -1,6 +1,6 @@
 import os
 import time
-from docprint import docPrint, flush_cache, docPrintFile, enableGitCommits
+from docprint import docPrint, docFlush, docPrintFile, enableGitCommits
 
 class GitHubIntegrationTest:
     def run(self):
@@ -41,7 +41,7 @@ class GitHubIntegrationTest:
             ])
             docPrint('alert', 'GitHub Integration', 'This content should sync to GitHub', alert_type='success')
             
-            flush_cache()
+            docFlush()
             print("  GitHub test content generated")
             
             time.sleep(2)
@@ -52,7 +52,7 @@ class GitHubIntegrationTest:
                 'Content synchronization active'
             ])
             
-            flush_cache()
+            docFlush()
             print("  GitHub update content added")
             
             print("  Waiting 65 seconds for GitHub sync...")

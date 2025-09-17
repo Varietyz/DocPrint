@@ -14,13 +14,13 @@ class LayoutFormatter(BaseFormatter):
         formatter = formatters.get(section_type)
         if formatter:
             return formatter(header, content, line, **kwargs)
-        return self._format_default(header, content, line)
+        return self._format_default(header, content, line, **kwargs)
     
     def _format_flex_layout(self, header, content, line, **kwargs):
         result = self._create_header(header)
         
         if not isinstance(content, list):
-            return self._format_default(header, content, line)
+            return self._format_default(header, content, line, **kwargs)
         
         container_style = kwargs.get('container_style', 'display: flex; gap: 20px;')
         result += f'<div style="{container_style}">\n\n'
@@ -44,13 +44,13 @@ class LayoutFormatter(BaseFormatter):
             result += '\n</div>\n\n'
         
         result += '</div>\n\n'
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_table_layout(self, header, content, line, **kwargs):
         result = self._create_header(header)
         
         if not isinstance(content, list):
-            return self._format_default(header, content, line)
+            return self._format_default(header, content, line, **kwargs)
         
         table_style = kwargs.get('table_style', 'width: 100%; border-collapse: collapse;')
         result += f'<table style="{table_style}">\n<tr>\n'
@@ -74,13 +74,13 @@ class LayoutFormatter(BaseFormatter):
             result += '\n</td>\n'
         
         result += '</tr>\n</table>\n\n'
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_grid_layout(self, header, content, line, **kwargs):
         result = self._create_header(header)
         
         if not isinstance(content, list):
-            return self._format_default(header, content, line)
+            return self._format_default(header, content, line, **kwargs)
         
         columns = kwargs.get('columns', 2)
         gap = kwargs.get('gap', '20px')
@@ -106,7 +106,7 @@ class LayoutFormatter(BaseFormatter):
             result += '\n</div>\n\n'
         
         result += '</div>\n\n'
-        return self._add_line_if_needed(result, line)
+        return self._add_line_if_needed(result, line, **kwargs)
     
     def _format_block(self, block_type, block_header, block_content, **kwargs):
         if self.unified_formatter is None:
@@ -119,7 +119,3 @@ class LayoutFormatter(BaseFormatter):
         else:
             content_only = self.unified_formatter.format_section(block_type, "temp", block_content, line=False, **kwargs)
             return content_only.replace("## temp\n\n", "", 1)
-    
-    def _format_default(self, header, content, line):
-        result = self._create_header(header)
-        return self._add_content_with_line(result, content, line)
