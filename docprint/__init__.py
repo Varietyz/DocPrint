@@ -1,4 +1,4 @@
-from .core import docPrint, flush_cache, docPrintFile
+from .core import docPrint, flush_cache, docPrintFile, enableGitCommits
 
-__version__ = "0.1.0"
-__all__ = ["docPrint", "flush_cache", "docPrintFile"]
+__version__ = "1.0.0"
+__all__ = ["docPrint", "flush_cache", "docPrintFile", "enableGitCommits"]
