@@ -1,6 +1,7 @@
 import time
 from ..config.constants import CACHE_FLUSH_INTERVAL, CACHE_FLUSH_COUNT
 from ..files.handler import FileHandler
+from ..content.layout_utils import LayoutUtils
 
 try:
     import xxhash
@@ -21,7 +22,11 @@ class CacheManager:
         self.flush_controller = None
     
     def add_entry(self, header, content):
-        content_hash = _hash_content(content)
+        if LayoutUtils.is_layout_content(content):
+            normalized_content = LayoutUtils.normalize_layout_content(content)
+            content_hash = _hash_content(normalized_content)
+        else:
+            content_hash = _hash_content(content)
 
         if header in self.content_hashes:
             if self.content_hashes[header] == content_hash:

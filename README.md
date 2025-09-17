@@ -385,6 +385,10 @@ docPrint('badge', 'Python Badge', {
 
 [![build](https://img.shields.io/badge/build-passing-green?style=flat)](https://github.com/repo)
 
+
+## Python Badge
+
+![Python](https://img.shields.io/badge/Python-3.9+-blue?style=flat&logo=python&logoColor=white)
 ---
 
 #### HTML Block

@@ -3,6 +3,7 @@ from .structural import StructuralFormatter
 from .visual import VisualFormatter
 from .content_basic import BasicContentFormatter
 from .content_rich import RichContentFormatter
+from .layout import LayoutFormatter
 
 class UnifiedFormatter:
     def __init__(self):
@@ -10,6 +11,7 @@ class UnifiedFormatter:
         self.visual = VisualFormatter()
         self.basic_content = BasicContentFormatter()
         self.rich_content = RichContentFormatter()
+        self.layout = LayoutFormatter(self)  # Pass self as dependency
     
     def format_section(self, section_type, header, content="", line=True, **kwargs):
         structural_types = {
@@ -30,6 +32,10 @@ class UnifiedFormatter:
             "alert", "collapsible", "image", "link_collection"
         }
         
+        layout_types = {
+            "flex_layout", "table_layout", "grid_layout"
+        }
+        
         if section_type in structural_types:
             return self.structural.format_section(section_type, header, content, line, **kwargs)
         elif section_type in visual_types:
@@ -38,5 +44,7 @@ class UnifiedFormatter:
             return self.basic_content.format_section(section_type, header, content, line, **kwargs)
         elif section_type in rich_content_types:
             return self.rich_content.format_section(section_type, header, content, line, **kwargs)
+        elif section_type in layout_types:
+            return self.layout.format_section(section_type, header, content, line, **kwargs)
         else:
             return self.basic_content.format_section("text", header, content, line, **kwargs)
