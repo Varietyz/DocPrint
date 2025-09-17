@@ -8,6 +8,7 @@ class DocPrintManager:
         self.unified_formatter = None
         self.file_handler = None
         self.current_filepath = None
+        self.github_syncer = None
 
     def initialize(self):
         if self.cache_manager is None:
@@ -43,6 +44,32 @@ class DocPrintManager:
         if self.cache_manager:
             self.cache_manager.flush()
 
+    def enable_git_commits(self, enabled, **kwargs):
+        if not enabled:
+            if self.github_syncer:
+                self.github_syncer.disable()
+                self.github_syncer = None
+            return
+
+        self.initialize()
+        
+        token = kwargs.get('token')
+        repo = kwargs.get('repo')
+        interval_minutes = kwargs.get('interval_minutes', 1)
+        
+        if not token or not repo:
+            raise ValueError("GitHub token and repo required")
+        
+        try:
+            from ..github.syncer import GitHubSyncer
+            self.github_syncer = GitHubSyncer(token, repo, self.file_handler)
+            self.github_syncer.enable(interval_minutes)
+            print(f"GitHub sync enabled: {repo} (every {interval_minutes} min)")
+        except ImportError:
+            print("GitHub integration not available")
+        except Exception as e:
+            print(f"GitHub setup failed: {e}")
+
 _docprint_manager = DocPrintManager()
 
 def docPrint(section_type, header, content="", line=True, **kwargs):
@@ -53,3 +80,6 @@ def docPrintFile(filepath):
 
 def flush_cache():
     _docprint_manager.flush_cache()
+
+def enableGitCommits(enabled, **kwargs):
+    _docprint_manager.enable_git_commits(enabled, **kwargs)

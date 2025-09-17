@@ -16,3 +16,8 @@ class BaseFormatter:
         if result and not result.endswith('\n'):
             return result + '\n'
         return result
+    
+    def _add_line_if_needed(self, result, line):
+        if line:
+            return result + "---\n\n"
+        return result

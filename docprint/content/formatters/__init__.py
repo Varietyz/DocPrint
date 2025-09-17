@@ -13,8 +13,9 @@ class UnifiedFormatter:
     
     def format_section(self, section_type, header, content="", line=True, **kwargs):
         structural_types = {
-            "bullets", "horizontal_rule", "code_block", "blockquote", 
-            "ordered_list", "unordered_list"
+            "bullets", "horizontal_rule", "code_block", "blockquote",
+            "ordered_list", "unordered_list", "footnotes", "definition_list",
+            "task_list"
         }
         
         visual_types = {
@@ -22,7 +23,7 @@ class UnifiedFormatter:
         }
         
         basic_content_types = {
-            "header", "table", "text"
+            "header", "table", "text", "advanced_table"
         }
         
         rich_content_types = {
