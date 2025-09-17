@@ -360,14 +360,24 @@ docPrint('task_list', 'Checklist', [
 
 ### Visual Elements
 
-#### Badge
+#### Badges
 ```python
+# Without Logo
 docPrint('badge', 'Build Status', {
     'label': 'build',
     'message': 'passing',
     'color': 'green',
     'style': 'flat',
     'url': 'https://github.com/repo'
+})
+
+# With Logo
+docPrint('badge', 'Python Badge', {
+    'label': 'Python',
+    'message': '3.9+',
+    'color': 'blue',
+    'logo': 'python',
+    'logo_color': 'white'
 })
 ```
 

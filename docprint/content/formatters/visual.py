@@ -23,8 +23,18 @@ class VisualFormatter(BaseFormatter):
             color = content.get('color', 'blue')
             style = content.get('style', 'flat')
             url = content.get('url', '')
+            logo = content.get('logo', '')
+            logo_color = content.get('logo_color', '')
+            logo_width = content.get('logo_width', '')
             
             badge_url = f"https://img.shields.io/badge/{label}-{message}-{color}?style={style}"
+            
+            if logo:
+                badge_url += f"&logo={logo}"
+                if logo_color:
+                    badge_url += f"&logoColor={logo_color}"
+                if logo_width:
+                    badge_url += f"&logoWidth={logo_width}"
             
             if url:
                 result += f"[![{label}]({badge_url})]({url})\n\n"

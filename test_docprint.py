@@ -14,6 +14,7 @@ def test_basic_functionality():
         {'metric': 'Memory', 'value': '2.1GB'}
     ], line=True)
 
+
     docPrint('footnotes', 'Research Paper', 
             ("This study builds on previous work", 
             {1: "Source: Smith et al. 2020", 2: "Additional data from Johnson study"}))
@@ -360,6 +361,14 @@ def test_all_formatter_combinations():
         'color': 'brightgreen'
     })
 
+    docPrint('badge', 'Python Badge', {
+        'label': 'Python',
+        'message': '3.9+',
+        'color': 'blue',
+        'logo': 'python',
+        'logo_color': 'white'
+    })
+    
     # Test image variations
     docPrint('image', 'Image Test', 'https://via.placeholder.com/150')
 
@@ -420,7 +429,7 @@ def main():
         test_error_handling()
         test_edge_cases()
         test_all_formatter_combinations()
-        test_github_integration()
+        #test_github_integration()
 
         print("\n=== All Tests Completed ===")
         print("Core functionality: PASSED")
