@@ -293,5 +293,5 @@ All functions are protected by RLock for concurrent access:
 - GitHub sync operations
 - File switching
 
-- [README.md](https://github.com/Varietyz/DocPrint/blob/tree/README.md)
-- [Formats.md](https://github.com/Varietyz/DocPrint/blob/tree/Formats.md) - Complete formatter documentation with examples
+- [README.md](https://github.com/Varietyz/DocPrint/blob/main/README.md)
+- [Formats.md](https://github.com/Varietyz/DocPrint/blob/main/Formats.md) - Complete formatter documentation with examples
