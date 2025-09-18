@@ -15,13 +15,13 @@ class BasicContentFormatter(BaseFormatter):
         return self._format_text(header, content, line, **kwargs)
 
     def _format_header(self, header, content, line, **kwargs):
-        result = f"## {header}\n\n"
+        result = self._create_header(header)
         if content:
             result += f"{content}\n\n"
         return self._add_line_if_needed(result, line, **kwargs)
 
     def _format_table(self, header, content, line, **kwargs):
-        result = f"## {header}\n\n"
+        result = self._create_header(header)
         if isinstance(content, list) and len(content) > 0:
             if isinstance(content[0], dict):
                 headers = list(content[0].keys())
@@ -37,7 +37,7 @@ class BasicContentFormatter(BaseFormatter):
         return result + "\n"
 
     def _format_text(self, header, content, line, **kwargs):
-        result = f"## {header}\n\n"
+        result = self._create_header(header)
         if content:
             result += f"{content}\n\n"
         return self._add_line_if_needed(result, line, **kwargs)

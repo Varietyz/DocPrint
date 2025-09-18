@@ -3,6 +3,9 @@ import threading
 from pathlib import Path
 from ..config import DEFAULT_OUTPUT_DIR, DOC_FILE_PREFIX, DOC_FILE_EXTENSION
 from ..content.matcher import ContentMatcher
+from ..utils.file_utils import atomic_write_file
+from ..utils.validation_utils import ValidationUtils
+from ..utils.error_utils import ErrorReporter
 
 class FileHandler:
     def __init__(self, output_dir=DEFAULT_OUTPUT_DIR):
@@ -24,13 +27,13 @@ class FileHandler:
             self._file_loaded = False
 
     def set_output_filename(self, filepath):
-        if not filepath or filepath == "." or filepath == "..":
-            self._set_default_target_file()
-            print(f"Reset to default file: {self.target_file}")
-            return
-
-        if any(char in filepath for char in ['<', '>', ':', '"', '|', '?', '*']):
-            raise ValueError(f"Invalid filename characters: {filepath}")
+        is_valid, error_msg = ValidationUtils.validate_filename(filepath)
+        if not is_valid:
+            if filepath in (".", "..") or not filepath:
+                self._set_default_target_file()
+                print(f"Reset to default file: {self.target_file}")
+                return
+            raise ValueError(error_msg)
 
         full_path = self.output_dir / filepath
         full_path.parent.mkdir(parents=True, exist_ok=True)
@@ -56,7 +59,7 @@ class FileHandler:
                     self._in_memory_content, entry['header'], entry['content']
                 )
 
-            self._atomic_write_file(self.target_file, self._in_memory_content)
+            atomic_write_file(self.target_file, self._in_memory_content)
 
     def _ensure_content_loaded(self):
         with self._lock:
@@ -67,8 +70,10 @@ class FileHandler:
                 try:
                     self._in_memory_content = self._read_file(self.target_file)
                 except Exception as e:
-                    print(f"Error reading file, starting fresh: {e}")
-                    self._in_memory_content = ""
+                    fallback = lambda: ""
+                    self._in_memory_content = ErrorReporter.report_file_error(
+                        "read", self.target_file, e, fallback
+                    ) or ""
             else:
                 self._in_memory_content = ""
 
@@ -82,7 +87,7 @@ class FileHandler:
             if file_size == 0:
                 return ""
 
-            if file_size > 1024 * 1024:  # 1MB
+            if file_size > 1024 * 1024:
                 with file_path.open('rb') as f:
                     with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
                         return mm.read().decode('utf-8')
@@ -91,27 +96,8 @@ class FileHandler:
         except FileNotFoundError:
             return ""
         except Exception as e:
-            print(f"Error reading file {file_path}: {e}")
+            ErrorReporter.report_file_error("read", file_path, e)
             return ""
-
-    def _atomic_write_file(self, file_path, content):
-        file_path.parent.mkdir(parents=True, exist_ok=True)
-
-        temp_file = file_path.with_suffix('.tmp')
-        try:
-            temp_file.write_text(content, encoding='utf-8')
-            temp_file.replace(file_path)
-        except Exception as e:
-            print(f"Error in atomic write: {e}")
-            try:
-                file_path.write_text(content, encoding='utf-8')
-            except Exception as fallback_error:
-                print(f"Fallback write also failed: {fallback_error}")
-            finally:
-                try:
-                    temp_file.unlink(missing_ok=True)
-                except Exception:
-                    pass
 
     def _write_entry(self, header, content):
         self.write_cached_content([{'header': header, 'content': content}])
