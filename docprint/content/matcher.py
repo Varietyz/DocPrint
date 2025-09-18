@@ -1,4 +1,7 @@
-from ..utils.regex_utils import get_regex
+try:
+    import regex as re
+except ImportError:
+    import re
 from .layout_utils import LayoutUtils
 
 class ContentMatcher:
@@ -6,7 +9,6 @@ class ContentMatcher:
         if LayoutUtils.is_layout_content(new_content):
             return self._handle_layout_content(existing_content, header, new_content)
         
-        re = get_regex()
         header_pattern = self._create_header_pattern(header)
         match = re.search(header_pattern, existing_content, re.MULTILINE)
         
@@ -16,7 +18,6 @@ class ContentMatcher:
             return self._append_new_section(existing_content, new_content)
     
     def _handle_layout_content(self, existing_content, header, new_content):
-        re = get_regex()
         normalized_new = LayoutUtils.normalize_layout_content(new_content)
         header_pattern = self._create_header_pattern(header)
         match = re.search(header_pattern, existing_content, re.MULTILINE)
@@ -36,7 +37,6 @@ class ContentMatcher:
             return self._append_new_section(existing_content, new_content)
     
     def _create_header_pattern(self, header):
-        re = get_regex()
         escaped_header = re.escape(header)
         return rf'^## {escaped_header}$'
     
@@ -53,7 +53,6 @@ class ContentMatcher:
         return existing_content
     
     def _find_section_end(self, content, start_pos):
-        re = get_regex()
         next_header_match = re.search(r'^## ', content[start_pos + 1:], re.MULTILINE)
         
         if next_header_match:
@@ -67,7 +66,6 @@ class ContentMatcher:
         return existing_clean != new_clean
     
     def _clean_content(self, content):
-        re = get_regex()
         cleaned = content.strip().replace('\r\n', '\n')
         cleaned = re.sub(r'\n{3,}', '\n\n', cleaned)
         return cleaned

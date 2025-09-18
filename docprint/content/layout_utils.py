@@ -1,4 +1,7 @@
-from ..utils.regex_utils import get_regex
+try:
+    import regex as re
+except ImportError:
+    import re
 
 class LayoutUtils:
     @staticmethod
@@ -8,7 +11,6 @@ class LayoutUtils:
     
     @staticmethod
     def normalize_layout_content(content):
-        re = get_regex()
         normalized = content.strip()
         normalized = re.sub(r'\s*\n\s*', '\n', normalized)
         normalized = re.sub(r'\n{3,}', '\n\n', normalized)

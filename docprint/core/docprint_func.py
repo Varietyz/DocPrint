@@ -1,8 +1,6 @@
 from ..cache.manager import CacheManager
 from ..content.formatters import UnifiedFormatter
 from ..files.handler import FileHandler
-from ..utils.validation_utils import ValidationUtils
-from ..utils.error_utils import ErrorReporter
 
 class DocPrintManager:
     def __init__(self):
@@ -60,9 +58,8 @@ class DocPrintManager:
         repo = kwargs.get('repo')
         interval_minutes = kwargs.get('interval_minutes', 1)
         
-        is_valid, error_msg = ValidationUtils.validate_required_params(token=token, repo=repo)
-        if not is_valid:
-            raise ValueError(error_msg)
+        if not token or not repo:
+            raise ValueError("GitHub token and repo required")
         
         try:
             from ..github.syncer import GitHubSyncer
@@ -70,9 +67,9 @@ class DocPrintManager:
             self.github_syncer.enable(interval_minutes)
             print(f"GitHub sync enabled: {repo} (every {interval_minutes} min)")
         except ImportError:
-            ErrorReporter.report_error("GitHub integration", "Module not available")
+            print("GitHub integration not available")
         except Exception as e:
-            ErrorReporter.report_error("GitHub setup", e)
+            print(f"GitHub setup failed: {e}")
 
 _docprint_manager = DocPrintManager()
 
